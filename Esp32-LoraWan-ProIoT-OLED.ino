@@ -33,7 +33,7 @@ https://github.com/mcci-catena/arduino-lmic (biblioteca alternativa adaptada par
  *    //#define LMIC_USE_INTERRUPTS
  *    map(value, fromLow, fromHigh, toLow, toHigh)
 */
-#include <lmic.h>
+#include <lmic.h> // Utilizando versão 3.3.0
 #include <hal/hal.h>
 #include <SPI.h>
 #include <Wire.h>
