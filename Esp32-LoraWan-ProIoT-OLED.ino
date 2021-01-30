@@ -1,27 +1,5 @@
 
 
-
-
-// const char *appEui = "70B3D57ED003AAFB";
-// const char *appKey = "39D84530766A3E62D97FD17DB1EDDC8A";
-
-// Device EUI 52dfce9d828f50c0
-// Device EUI { 0x52, 0xDF, 0xCE, 0x9D, 0x82, 0x8F, 0x50, 0xC0 }
-
-// ATIVAÇÃO DE SEGURANÇA ABP 
-// DEVICE ADDRESS 82a436cb
-// NETWORK SESSION ENCRYPTION KEY { 0x48, 0xF4, 0x0A, 0xB9, 0x71, 0xF3, 0xEB, 0xA6, 0x0A, 0x2D, 0x71, 0x7B, 0xD3, 0xA0, 0x92, 0x14 }
-// APPLICATION SESSION KEY { 0x2F, 0xD2, 0xCE, 0xB8, 0xED, 0x68, 0xCE, 0x8F, 0xE2, 0x43, 0xD8, 0x7A, 0xF2, 0x14, 0x0B, 0xF1 }
-
-/* Valores do Higrômetro
-- 0: the sensor is in the open air
-- 1-299: dry soil
-- 300-699: moist soil
-- 700-949: waterlogged soil
-- 950: the sensor is immersed in water, e.g. the glass of water
-*/
-
-
 /*Referências
 Guia_Primeiros_Passos_Rede_LoRaWAN.pdf
 https://github.com/phfbertoleti/dummy_esp32_lorawan
@@ -80,17 +58,13 @@ https://github.com/mcci-catena/arduino-lmic (biblioteca alternativa adaptada par
 #define RADIO_DIO_1_PORT        35
 #define RADIO_DIO_2_PORT        34
 
-#define payloadSize             34
-// {"H":3333,"T":27,"U":52,"L":3033}
+#define payloadSize             34 
 
 #define pinLDR 2
 #define pinDHT11 13
-#define SensorPin 37 //Higrômetro
-
+#define SensorPin 37 //Sensor de chuva
 
 dht DHT; //VARIÁVEL DO TIPO DHT
-//int sensorValue = -1; //Higrômetro
-//int saleSize = 1; // descunto do valor do payload
 
 /* Constantes do rádio LoRa: GPIOs utilizados para comunicação
    com rádio SX1276 */
@@ -103,14 +77,14 @@ const lmic_pinmap lmic_pins = {
 
 /* Constantes do LoraWAN */
 /* - Chaves (network e application keys) */
-static const PROGMEM u1_t NWKSKEY[16] = { 0x31, 0xC7, 0x4A, 0x0C, 0x87, 0x99, 0x6D, 0x81, 0xDF, 0xC1, 0xBF, 0x0D, 0xA3, 0x08, 0x15, 0xD3 }; //coloque aqui sua network session key
-static const u1_t PROGMEM APPSKEY[16] = { 0x98, 0x00, 0x82, 0xFF, 0x99, 0x43, 0xA4, 0x5D, 0xF6, 0xE3, 0xCA, 0x61, 0x98, 0xAD, 0xF0, 0x1E }; //coloque aqui sua application session key
+static const PROGMEM u1_t NWKSKEY[16] = {  }; //coloque aqui sua network session key
+static const u1_t PROGMEM APPSKEY[16] = {  }; //coloque aqui sua application session key
 
 /* - Device Address */
-static const u4_t DEVADDR = 0xf1180a2b;
+static const u4_t DEVADDR = ;
 
 /* - Tempo entre envios de pacotes LoRa */
-const unsigned TX_INTERVAL = 600; //30s = 30 segundos 
+const unsigned TX_INTERVAL = 600; //600s = 600 segundos 
 
 /* Variáveis e objetos globais */
 static osjob_t sendjob; //objeto para job de envio de dados via ABP
@@ -255,6 +229,7 @@ void do_send(osjob_t* j)
     json["U"] = (int)DHT.humidity;
     json["L"] = ldrValue;
 
+  //  Apenas para justar o tamanho do payload LoRaWAN
  
         if ((sensorValue >= 100)&&(sensorValue < 1000)) {
             saleSize++;
@@ -277,7 +252,6 @@ void do_send(osjob_t* j)
             saleSize = saleSize + 3;
         }
 
-    /* Formata dado a ser enviado (número aleatório de 0 a 99) */   
     serializeJson(json, mydata_str);  
     //Serial.print(F("JSON:"));
     //Serial.println(mydata_str);
